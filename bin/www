@@ -7,12 +7,16 @@
 var app = require('../app');
 var debug = require('debug')('u-med-node.js-server:server');
 var http = require('http');
+const mongoose = require('mongoose')
+const dotenv = require('dotenv')
+const dataLoader = require('../src/components/dataLoader')
+dotenv.config()
 
 /**
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '8080');
 app.set('port', port);
 
 /**
@@ -25,9 +29,16 @@ var server = http.createServer(app);
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
+mongoose.connect(process.env.MONGO_URL).then(() => {
+  server.listen(port);
+  server.on('error', onError);
+  server.on('listening', onListening);
+  console.log(`MongoDB connected to ${mongoose.connection.host}`)
+  dataLoader.dataLoaderAdmin()
+}).catch(err => {
+  console.log(err)
+  process.exit(1)
+}) 
 
 /**
  * Normalize a port into a number, string, or false.
