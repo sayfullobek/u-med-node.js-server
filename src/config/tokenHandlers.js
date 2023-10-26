@@ -35,9 +35,9 @@ const tokenDecode = (req) => {
 exports.verifyToken = async (req, res, next) => {
    const tokenDecoded = tokenDecode(req);
    if(tokenDecoded) {
-      const Users = await Users.findById(tokenDecoded.id);
-      if(!Users) return res.status(403).json({ message: 'No allowed' })
-      req.Users = Users;
+      const users = await Users.findById(tokenDecoded.id);
+      if(!users) return res.status(403).json({ message: 'No allowed' })
+      req.users = users;
       next();
    } else {
       res.status(401).json({

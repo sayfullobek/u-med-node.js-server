@@ -1,3 +1,4 @@
 module.exports = {
-    Users:require('./usersSchema')
+    Users:require('./usersSchema'),
+    Diseases:require('./diseasesSchema'),
 }
